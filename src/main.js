@@ -6,12 +6,14 @@ const puzzleKey = params.get('puzzle') || 'ApplesBananas';
 
 try {
   const module = await import(`./puzzles/${puzzleKey}.js`);
-  if (typeof module.generate === 'function') {
-    const model = module.generate();
-    console.log(`${puzzleKey} model:`, model);
+  if (module.generate && module.renderPuzzle) {
+    const data = module.generate();              // create puzzle model
+    document.getElementById('puzzleArea')        // insert into page
+            .appendChild(module.renderPuzzle(1, data));
   } else {
-    console.error(`${puzzleKey}.js has no generate() export`);
+    console.error(`${puzzleKey}.js is missing generate() or renderPuzzle()`);
   }
+
 } catch (err) {
   console.error(`Could not load puzzle "${puzzleKey}"`, err);
   document.body.innerHTML = `<p style="color:red">Puzzle "${puzzleKey}" not found.</p>`;

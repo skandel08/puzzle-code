@@ -1,0 +1,10 @@
+{
+    "server": {
+      "baseDir": "public",
+      "routes": {
+        "/src": "src"
+      }
+    },
+    "watch": ["public", "src"]
+  }
+  

@@ -192,3 +192,12 @@ document.getElementById('downloadPdfBtn').onclick = () => {
   try { window.print(); }
   finally { document.getElementById('exportNotice').style.display = 'none'; }
 };
+
+export function generate() {
+  // 4×4 grid, 2×2 window, apples-only mode, exact-count clue
+  return makePuzzle(4, 2, 'apples', 'count');
+}
+
+// re-use existing renderer & toggle
+export { renderPuzzle, toggleSolutions };
+
