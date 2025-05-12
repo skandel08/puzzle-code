@@ -193,11 +193,50 @@ document.getElementById('downloadPdfBtn').onclick = () => {
   finally { document.getElementById('exportNotice').style.display = 'none'; }
 };
 
+/* -------------------------------------------------
+   puzzle-specific controls for the generic loader
+--------------------------------------------------*/
+export function renderControls(target) {
+  target.innerHTML = `
+    <label>Grid size
+      <select id="gridSizeSel"></select>
+    </label>
+    <label>Fruits per cell
+      <select id="fruitModeSel">
+        <option value="apples">Apples only</option>
+        <option value="applesBananas">Apples &amp; Bananas</option>
+      </select>
+    </label>
+    <label>Sub-grid size
+      <select id="subgridSizeSel"></select>
+    </label>
+    <label>Clue type
+      <select id="clueTypeSel">
+        <option value="count">Exact count</option>
+        <option value="equal">Apples = Bananas</option>
+        <option value="less">Apples &lt; Bananas</option>
+        <option value="greater">Apples &gt; Bananas</option>
+      </select>
+    </label>
+    <label>Puzzles per page
+      <select id="batchSizeSel">
+        <option value="1">1 (single)</option>
+        <option value="4" selected>4 (2×2)</option>
+        <option value="6">6 (3×2)</option>
+      </select>
+    </label>
+    <button id="generateBtn">Generate</button>
+    <button id="toggleSolutionsBtn">Show solutions</button>
+    <button id="downloadPdfBtn">Download PDF</button>
+  `;
+}
+
 export function generate() {
   // 4×4 grid, 2×2 window, apples-only mode, exact-count clue
   return makePuzzle(4, 2, 'apples', 'count');
 }
 
 // re-use existing renderer & toggle
-export { renderPuzzle, toggleSolutions };
+export { renderPuzzle, toggleSolutions, renderControls };
+
 
