@@ -5,7 +5,7 @@
  *  • ResizeObserver keeps SVGs from overflowing on narrow windows
  *  © 2025 – free to re-use
  */
-(() => {
+
   /* ─────────── helpers ─────────── */
   const clone = b => b.map(r => r.slice());
 
@@ -128,7 +128,8 @@
     return svg;
   }
 
-  /* ─────────── page builder ─────────── */
+  /* Previous page builder and shrink SVG's and init commented out 
+
   const page      = document.getElementById('page');
   const sizeSel   = document.getElementById('size');
   const layoutSel = document.getElementById('layout');
@@ -177,7 +178,7 @@
         .forEach(g => g.style.display = solutions ? 'block' : 'none');
   };
 
-  /* shrink SVGs gracefully on narrow screens */
+  
   new ResizeObserver(() => {
     const maxW = document.body.clientWidth - 40;           // margin
     const cols = { '3x2': 2, '2x2': 2, '1x1': 1 }[layoutSel.value];
@@ -185,6 +186,17 @@
     page.querySelectorAll('svg').forEach(svg => svg.style.maxWidth = `${each}px`);
   }).observe(document.body);
 
-  /* init */
+  
   rebuild(true);
-})();
+
+*/
+
+// ---------- ES-module exports for the new loader ----------
+export function generate() {
+  return makePuzzle(5);          // 5×5 by default
+}
+
+export function renderPuzzle(idx, data) {
+  return render(data);           // ignore idx, reuse existing render()
+}
+
