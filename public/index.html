@@ -15,10 +15,46 @@
     h1    { margin: 0 0 .15in; font-size: 20pt; }
     h2    { margin: 0 0 .15in; font-size: 16pt; }
 
-    /* Toolbar (screen only) */
-    .toolbar { display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1.25rem;align-items:flex-end; }
-    label   { display:flex;flex-direction:column;font-size:.9rem; }
-    button  { padding:.4rem .85rem;font-size:.95rem; }
+/* Toolbar (screen only) */
+.toolbar {
+  display:flex;
+  flex-wrap:wrap;
+  gap:1rem;
+  margin-bottom:1.25rem;
+  align-items:flex-end;
+  justify-content:center;          /* keep the whole row centred */
+}
+
+/* every direct child (labels & buttons) ⇒ no auto-stretch */
+.toolbar > * { flex:0 0 auto; }
+
+.toolbar label {
+  display:flex;
+  flex-direction:column;
+  font-size:.9rem;
+}
+
+/* dropdown hugs text width */
+.toolbar label select {
+  width: max-content;   /* shrink to text width   */
+  max-width: 12rem;     /* don’t grow past ~200 px */
+  white-space: nowrap;  /* keep the label on one line */
+}
+
+
+.toolbar button {                  /* buttons hug their text     */
+  padding:.4rem .85rem;
+  font-size:.95rem;
+}
+
+
+/* keep labels from stretching in print‑PDF layout */
+@media print{
+  .toolbar{display:none!important;}
+}
+
+
+
 
     /* Puzzle card */
     .puzzle { display:inline-block;margin:var(--gap);padding:.5rem .25rem .9rem;border:1px solid #bbb;border-radius:6px;text-align:center;page-break-inside:avoid; }

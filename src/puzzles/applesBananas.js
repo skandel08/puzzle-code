@@ -187,6 +187,50 @@ const clueSel  = target.querySelector('#clueTypeSel');
 const batchSel = target.querySelector('#batchSizeSel');
 const genBtn   = target.querySelector('#generateBtn');
 
+/* — populate the <select>s — */
+for (let n = MIN_GRID; n <= MAX_GRID; n++) {
+  gridSel.add(new Option(`${n} × ${n}`, n));
+}
+SUBGRID_CHOICES.forEach(sz =>
+  subSel.add(new Option(`${sz} × ${sz}`, sz)));
+
+/* — keep the subtitle ( “3 × 3” etc. ) in sync — */
+function updateSubtitle() {
+  document.getElementById('gridSizeTitle').textContent =
+    `${gridSel.value} × ${gridSel.value}`;
+}
+updateSubtitle();
+gridSel.onchange = updateSubtitle;
+
+/* — hook up the buttons — */
+genBtn.onclick = () => {
+  const area = document.getElementById('puzzleArea');
+  area.innerHTML = '';
+  const needed = +batchSel.value;
+  for (let i = 0; i < needed; i++) {
+    try {
+      const data = makePuzzle(+gridSel.value,
+                              +subSel.value,
+                              fruitSel.value,
+                              clueSel.value);
+      area.appendChild(renderPuzzle(i + 1, data));
+    } catch { i--; }         // keep trying until we have “needed” puzzles
+  }
+};
+
+toggleSolutionsBtn.onclick = () => {
+  const show = toggleSolutionsBtn.textContent.startsWith('Show');
+  toggleSolutionsBtn.textContent = show ? 'Hide solutions' : 'Show solutions';
+  toggleSolutions(show);
+};
+
+downloadPdfBtn.onclick = () => {
+  document.getElementById('exportNotice').style.display = 'block';
+  try   { window.print(); }
+  finally { document.getElementById('exportNotice').style.display = 'none'; }
+};
+
+
 /* ── populate the <select>s ── */
 for (let n = MIN_GRID; n <= MAX_GRID; n++) {
   gridSel.add(new Option(`${n} × ${n}`, n));
