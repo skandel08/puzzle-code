@@ -1,7 +1,5 @@
 <!-- ===============================================
-Apples & Bananas — v0.6  (PDF tweak + flexible batch)
-====================================================
-NOTE: Markdown fences removed; this is clean HTML now.
+ Puzzle-Code shell  – generic layout for all puzzles
 ==================================================== -->
 
 <!DOCTYPE html>
@@ -9,7 +7,8 @@ NOTE: Markdown fences removed; this is clean HTML now.
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Apples & Bananas Puzzles</title>
+  <title>Puzzle Code</title>
+
   <style>
     :root { --cell: 48px; --gap: 12px; }
     body  { font-family: system-ui, sans-serif; margin: .75in auto; display:flex; flex-direction:column; align-items:center; }
@@ -41,23 +40,18 @@ NOTE: Markdown fences removed; this is clean HTML now.
       h1,h2{margin:0 auto .15in;}
       .puzzle{break-inside:avoid;}
     }
-h1,h2{margin:0 auto .15in;} .puzzle{break-inside:avoid;} }
+
   </style>
 </head>
 <body>
-  <h1>🍎 Apples &amp; Bananas 🍌</h1>
+  <h1 id="pageTitle">Puzzle Code</h1>
   <h2 id="gridSizeTitle"></h2>
 
-  <div class="toolbar">
-    <label>Grid size<select id="gridSizeSel"></select></label>
-    <label>Fruits per cell<select id="fruitModeSel"><option value="apples">Apples only</option><option value="applesBananas">Apples &amp; Bananas</option></select></label>
-    <label>Sub‑grid size<select id="subgridSizeSel"></select></label>
-    <label>Clue type<select id="clueTypeSel"><option value="count">Exact count</option><option value="equal">Apples = Bananas</option><option value="less">Apples &lt; Bananas</option><option value="greater">Apples &gt; Bananas</option></select></label>
-    <label>Puzzles per page<select id="batchSizeSel"><option value="1">1 (single)</option><option value="4" selected>4 (2×2)</option><option value="6">6 (3×2)</option></select></label>
 
-    <button id="generateBtn">Generate</button>
-    <button id="toggleSolutionsBtn">Show solutions</button>
-    <button id="downloadPdfBtn">Download PDF</button>
+  <div class="toolbar">
+   <!-- puzzle-specific controls will be injected here -->
+  <div id="controls"></div>
+
   </div>
 
   <div id="puzzleArea" class="sheet"></div>
