@@ -237,6 +237,6 @@ export function generate() {
 }
 
 // re-use existing renderer & toggle
-export { renderPuzzle, toggleSolutions, renderControls };
+export { renderPuzzle, toggleSolutions };
 
 
