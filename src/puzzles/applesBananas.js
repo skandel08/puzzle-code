@@ -141,57 +141,7 @@ function toggleSolutions(show) {
 }
 
 // =============== DOM Wiring ======================
-const gridSel  = document.getElementById('gridSizeSel');
-const fruitSel = document.getElementById('fruitModeSel');
-const subSel   = document.getElementById('subgridSizeSel');
-const batchSel = document.getElementById('batchSizeSel');
 
-// Populate selects
-for (let n = MIN_GRID; n <= MAX_GRID; n++) {
-  gridSel.add(new Option(`${n} × ${n}`, n));
-}
-SUBGRID_CHOICES.forEach(sz => subSel.add(new Option(`${sz} × ${sz}`, sz)));
-
-function updateSubtitle() {
-  document.getElementById('gridSizeTitle').textContent = `${gridSel.value} × ${gridSel.value}`;
-}
-updateSubtitle();
-gridSel.addEventListener('change', updateSubtitle);
-
-let puzzleCount = 0;
-function addPuzzle() {
-  const data = makePuzzle(
-    +gridSel.value,
-    +subSel.value,
-    fruitSel.value,
-    document.getElementById('clueTypeSel').value
-  );
-  document.getElementById('puzzleArea').appendChild(renderPuzzle(++puzzleCount, data));
-}
-
-// --- button handlers ---
-document.getElementById('generateBtn').onclick = () => {
-  // clear old puzzles
-  document.getElementById('puzzleArea').innerHTML = '';
-  puzzleCount = 0;
-  const num = +batchSel.value;
-  for (let i = 0; i < num; i++) {
-    try { addPuzzle(); } catch (e) { console.warn('Generation failed, skipping', e); i--; }
-  }
-};
-
-let solVisible = false;
-document.getElementById('toggleSolutionsBtn').onclick = e => {
-  solVisible = !solVisible;
-  e.target.textContent = solVisible ? 'Hide solutions' : 'Show solutions';
-  toggleSolutions(solVisible);
-};
-
-document.getElementById('downloadPdfBtn').onclick = () => {
-  document.getElementById('exportNotice').style.display = 'block';
-  try { window.print(); }
-  finally { document.getElementById('exportNotice').style.display = 'none'; }
-};
 
 /* -------------------------------------------------
    puzzle-specific controls for the generic loader
@@ -229,6 +179,46 @@ export function renderControls(target) {
     <button id="toggleSolutionsBtn">Show solutions</button>
     <button id="downloadPdfBtn">Download PDF</button>
   `;
+  // — wire up the freshly-injected controls —
+const gridSel  = target.querySelector('#gridSizeSel');
+const fruitSel = target.querySelector('#fruitModeSel');
+const subSel   = target.querySelector('#subgridSizeSel');
+const clueSel  = target.querySelector('#clueTypeSel');
+const batchSel = target.querySelector('#batchSizeSel');
+const genBtn   = target.querySelector('#generateBtn');
+
+/* ── populate the <select>s ── */
+for (let n = MIN_GRID; n <= MAX_GRID; n++) {
+  gridSel.add(new Option(`${n} × ${n}`, n));
+}
+SUBGRID_CHOICES.forEach(sz =>
+  subSel.add(new Option(`${sz} × ${sz}`, sz)));
+
+/* ── dynamic subtitle in <h2 id="gridSizeTitle"> ── */
+function updateSubtitle() {
+  document.getElementById('gridSizeTitle').textContent =
+    `${gridSel.value} × ${gridSel.value}`;
+}
+updateSubtitle();
+gridSel.onchange = updateSubtitle;
+
+/* ── Generate-button logic ── */
+function addPuzzle() {
+  const data = makePuzzle(+gridSel.value,
+                          +subSel.value,
+                           fruitSel.value,
+                           clueSel.value);
+  document.getElementById('puzzleArea')
+          .appendChild(renderPuzzle(document
+            .querySelectorAll('.puzzle').length + 1, data));
+}
+
+genBtn.onclick = () => {
+  document.getElementById('puzzleArea').innerHTML = '';
+  const num = +batchSel.value;
+  for (let i = 0; i < num; i++) addPuzzle();
+};
+
 }
 
 export function generate() {
