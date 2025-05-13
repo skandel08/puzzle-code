@@ -1,0 +1,30 @@
+<label class="field">Grid&nbsp;size
+    <select id="gridSizeSel"></select>
+  </label>
+  <label class="field">Fruits&nbsp;per&nbsp;cell
+    <select id="fruitModeSel">
+      <option value="apples">Apples only</option>
+      <option value="applesBananas">Apples &amp; Bananas</option>
+    </select>
+  </label>
+  <label class="field">Sub-grid&nbsp;size
+    <select id="subgridSizeSel"></select>
+  </label>
+  <label class="field">Puzzles&nbsp;per&nbsp;page
+    <select id="batchSizeSel">
+      <option value="1">1 (single)</option>
+      <option value="4" selected>4 (2×2)</option>
+      <option value="6">6 (3×2)</option>
+    </select>
+  </label>
+  
+  <button id="generateBtn">Generate</button>
+  <button id="toggleSolutionsBtn">Show solutions</button>
+  <button id="downloadPdfBtn">Download PDF</button>
+  
+  <!-- wire the PDF button once -->
+  <script type="module">
+    import { downloadPdf } from '/public/print.js';
+    document.getElementById('downloadPdfBtn').onclick = downloadPdf;
+  </script>
+  

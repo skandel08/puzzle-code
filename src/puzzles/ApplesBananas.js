@@ -2,6 +2,9 @@
  * Apples & Bananas – browser logic  (v0.6 – prettified)
  ******************************************************/
 
+/* external HTML fragment for the toolbar */
+export const ui = '/controls/applesBananas.html';
+
 // =============== Configuration ==================
 const MIN_GRID = 3;
 const MAX_GRID = 10;
@@ -139,138 +142,57 @@ function toggleSolutions(show) {
     gDiv.appendChild(box);
   });
 }
+/* =========================================================
+   renderControls  – wires the toolbar that main.js injected
+   (the toolbar HTML itself lives in /controls/applesBananas.html)
+   =========================================================*/
+   export function renderControls(target) {
 
-// =============== DOM Wiring ======================
-
-
-/* -------------------------------------------------
-   puzzle-specific controls for the generic loader
---------------------------------------------------*/
-export function renderControls(target) {
-  target.innerHTML = `
-  <label class="field">Grid&nbsp;size
-    <select id="gridSizeSel"></select>
-  </label>
+    // — wire up the freshly-injected controls —
+    const gridSel  = target.querySelector('#gridSizeSel');
+    const subSel   = target.querySelector('#subgridSizeSel');
+    const batchSel = target.querySelector('#batchSizeSel');
+    const genBtn   = target.querySelector('#generateBtn');
   
-  <label class="field">Fruits&nbsp;per&nbsp;cell
-    <select id="fruitModeSel">
-      <option value="apples">Apples only</option>
-      <option value="applesBananas">Apples &amp; Bananas</option>
-    </select>
-  </label>
-
-  <label class="field">Sub-grid&nbsp;size
-    <select id="subgridSizeSel"></select>
-  </label>
-
-  <label class="field">Clue&nbsp;type
-    <select id="clueTypeSel">
-      <option value="count">Exact count</option>
-      <option value="equal">Apples = Bananas</option>
-      <option value="less">Apples &lt; Bananas</option>
-      <option value="greater">Apples &gt; Bananas</option>
-    </select>
-  </label>
-
-  <label class="field">Puzzles&nbsp;per&nbsp;page
-    <select id="batchSizeSel">
-      <option value="1">1 (single)</option>
-      <option value="4" selected>4 (2×2)</option>
-      <option value="6">6 (3×2)</option>
-    </select>
-  </label>
-
-  <button id="generateBtn">Generate</button>
-  <button id="toggleSolutionsBtn">Show solutions</button>
-  <button id="downloadPdfBtn">Download PDF</button>
-
-`;
-
-
-  // — wire up the freshly-injected controls —
-const gridSel  = target.querySelector('#gridSizeSel');
-const fruitSel = target.querySelector('#fruitModeSel');
-const subSel   = target.querySelector('#subgridSizeSel');
-const clueSel  = target.querySelector('#clueTypeSel');
-const batchSel = target.querySelector('#batchSizeSel');
-const genBtn   = target.querySelector('#generateBtn');
-
-/* — populate the <select>s — */
-for (let n = MIN_GRID; n <= MAX_GRID; n++) {
-  gridSel.add(new Option(`${n} × ${n}`, n));
-}
-SUBGRID_CHOICES.forEach(sz =>
-  subSel.add(new Option(`${sz} × ${sz}`, sz)));
-
-/* — keep the subtitle ( “3 × 3” etc. ) in sync — */
-function updateSubtitle() {
-  document.getElementById('gridSizeTitle').textContent =
-    `${gridSel.value} × ${gridSel.value}`;
-}
-updateSubtitle();
-gridSel.onchange = updateSubtitle;
-
-/* — hook up the buttons — */
-genBtn.onclick = () => {
-  const area = document.getElementById('puzzleArea');
-  area.innerHTML = '';
-  const needed = +batchSel.value;
-  for (let i = 0; i < needed; i++) {
-    try {
+    /* --- populate the <select>s --- */
+    for (let n = MIN_GRID; n <= MAX_GRID; n++) {
+      gridSel.add(new Option(`${n} × ${n}`, n));
+    }
+    SUBGRID_CHOICES.forEach(sz =>
+      subSel.add(new Option(`${sz} × ${sz}`, sz)));
+  
+    /* --- subtitle in <h2 id="gridSizeTitle"> --- */
+    const updateSubtitle = () =>
+      (document.getElementById('gridSizeTitle').textContent =
+        `${gridSel.value} × ${gridSel.value}`);
+    updateSubtitle();
+    gridSel.onchange = updateSubtitle;
+  
+    /* --- Generate button --- */
+    function addPuzzle() {
       const data = makePuzzle(+gridSel.value,
                               +subSel.value,
-                              fruitSel.value,
-                              clueSel.value);
-      area.appendChild(renderPuzzle(i + 1, data));
-    } catch { i--; }         // keep trying until we have “needed” puzzles
+                              'apples',          // apples-only for now
+                              'count');          // exact-count clue
+      document.getElementById('puzzleArea')
+              .appendChild(renderPuzzle(
+                document.querySelectorAll('.puzzle').length + 1, data));
+    }
+  
+    genBtn.onclick = () => {
+      document.getElementById('puzzleArea').innerHTML = '';
+      for (let i = 0; i < +batchSel.value; i++) addPuzzle();
+    };
+  }   // <---────────────── end of renderControls wrapper
+  
+  /* =========================================================
+     one default puzzle for the quick-start demo / PDF preview
+     =========================================================*/
+  export function generate() {
+    // 4×4 grid, 2×2 window, apples-only mode, exact-count clue
+    return makePuzzle(4, 2, 'apples', 'count');
   }
-};
-
-toggleSolutionsBtn.onclick = () => {
-  const show = toggleSolutionsBtn.textContent.startsWith('Show');
-  toggleSolutionsBtn.textContent = show ? 'Hide solutions' : 'Show solutions';
-  toggleSolutions(show);
-};
-
-downloadPdfBtn.onclick = () => {
-  document.getElementById('exportNotice').style.display = 'block';
-  try   { window.print(); }
-  finally { document.getElementById('exportNotice').style.display = 'none'; }
-};
-
-/* ── dynamic subtitle in <h2 id="gridSizeTitle"> ── */
-function updateSubtitle() {
-  document.getElementById('gridSizeTitle').textContent =
-    `${gridSel.value} × ${gridSel.value}`;
-}
-updateSubtitle();
-gridSel.onchange = updateSubtitle;
-
-/* ── Generate-button logic ── */
-function addPuzzle() {
-  const data = makePuzzle(+gridSel.value,
-                          +subSel.value,
-                           fruitSel.value,
-                           clueSel.value);
-  document.getElementById('puzzleArea')
-          .appendChild(renderPuzzle(document
-            .querySelectorAll('.puzzle').length + 1, data));
-}
-
-genBtn.onclick = () => {
-  document.getElementById('puzzleArea').innerHTML = '';
-  const num = +batchSel.value;
-  for (let i = 0; i < num; i++) addPuzzle();
-};
-
-}
-
-export function generate() {
-  // 4×4 grid, 2×2 window, apples-only mode, exact-count clue
-  return makePuzzle(4, 2, 'apples', 'count');
-}
-
-// re-use existing renderer & toggle
-export { renderPuzzle, toggleSolutions };
-
-
+  
+  /* re-export the renderer & solution-toggle */
+  export { renderPuzzle, toggleSolutions };
+  

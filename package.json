@@ -1,24 +1,14 @@
 {
   "name": "puzzle-code",
   "version": "1.0.0",
-  "description": "Puzzles",
-  "main": "index.js",
+  "description": "Puzzles (local dev with Vite)",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "lite-server"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/skandel08/puzzle-code.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/skandel08/puzzle-code/issues"
-  },
-  "homepage": "https://github.com/skandel08/puzzle-code#readme",
   "devDependencies": {
-    "lite-server": "^2.6.1"
+    "vite": "^5.2.0"
   }
 }
