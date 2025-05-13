@@ -148,37 +148,45 @@ function toggleSolutions(show) {
 --------------------------------------------------*/
 export function renderControls(target) {
   target.innerHTML = `
-    <label>Grid size
-      <select id="gridSizeSel"></select>
-    </label>
-    <label>Fruits per cell
-      <select id="fruitModeSel">
-        <option value="apples">Apples only</option>
-        <option value="applesBananas">Apples &amp; Bananas</option>
-      </select>
-    </label>
-    <label>Sub-grid size
-      <select id="subgridSizeSel"></select>
-    </label>
-    <label>Clue type
-      <select id="clueTypeSel">
-        <option value="count">Exact count</option>
-        <option value="equal">Apples = Bananas</option>
-        <option value="less">Apples &lt; Bananas</option>
-        <option value="greater">Apples &gt; Bananas</option>
-      </select>
-    </label>
-    <label>Puzzles per page
-      <select id="batchSizeSel">
-        <option value="1">1 (single)</option>
-        <option value="4" selected>4 (2×2)</option>
-        <option value="6">6 (3×2)</option>
-      </select>
-    </label>
-    <button id="generateBtn">Generate</button>
-    <button id="toggleSolutionsBtn">Show solutions</button>
-    <button id="downloadPdfBtn">Download PDF</button>
-  `;
+  <label class="field">Grid&nbsp;size
+    <select id="gridSizeSel"></select>
+  </label>
+  
+  <label class="field">Fruits&nbsp;per&nbsp;cell
+    <select id="fruitModeSel">
+      <option value="apples">Apples only</option>
+      <option value="applesBananas">Apples &amp; Bananas</option>
+    </select>
+  </label>
+
+  <label class="field">Sub-grid&nbsp;size
+    <select id="subgridSizeSel"></select>
+  </label>
+
+  <label class="field">Clue&nbsp;type
+    <select id="clueTypeSel">
+      <option value="count">Exact count</option>
+      <option value="equal">Apples = Bananas</option>
+      <option value="less">Apples &lt; Bananas</option>
+      <option value="greater">Apples &gt; Bananas</option>
+    </select>
+  </label>
+
+  <label class="field">Puzzles&nbsp;per&nbsp;page
+    <select id="batchSizeSel">
+      <option value="1">1 (single)</option>
+      <option value="4" selected>4 (2×2)</option>
+      <option value="6">6 (3×2)</option>
+    </select>
+  </label>
+
+  <button id="generateBtn">Generate</button>
+  <button id="toggleSolutionsBtn">Show solutions</button>
+  <button id="downloadPdfBtn">Download PDF</button>
+
+`;
+
+
   // — wire up the freshly-injected controls —
 const gridSel  = target.querySelector('#gridSizeSel');
 const fruitSel = target.querySelector('#fruitModeSel');
@@ -229,14 +237,6 @@ downloadPdfBtn.onclick = () => {
   try   { window.print(); }
   finally { document.getElementById('exportNotice').style.display = 'none'; }
 };
-
-
-/* ── populate the <select>s ── */
-for (let n = MIN_GRID; n <= MAX_GRID; n++) {
-  gridSel.add(new Option(`${n} × ${n}`, n));
-}
-SUBGRID_CHOICES.forEach(sz =>
-  subSel.add(new Option(`${sz} × ${sz}`, sz)));
 
 /* ── dynamic subtitle in <h2 id="gridSizeTitle"> ── */
 function updateSubtitle() {

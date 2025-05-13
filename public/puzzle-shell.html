@@ -1,0 +1,28 @@
+<!-- public/puzzle-shell.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><span id="pageTitle">Puzzle Shell</span></title>
+
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <h1 id="pageTitle">Puzzle Code</h1>
+  <h2 id="gridSizeTitle"></h2>
+
+  <!-- reusable toolbar row -->
+  <div class="toolbar">
+    <div id="controls"><!-- puzzle injects its own <label>s & buttons --></div>
+  </div>
+
+  <!-- puzzle grid(s) land here -->
+  <div id="puzzleArea" class="sheet"></div>
+
+  <p id="exportNotice" style="display:none;font-style:italic;margin-top:2rem;">Exporting PDF… please wait.</p>
+
+  <!-- generic loader; decides *which* puzzle to import via ?puzzle= -->
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

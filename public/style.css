@@ -1,0 +1,96 @@
+/* ========= global tokens ========= */
+:root{
+  --cell : 48px;   /* puzzle grid square size */
+  --gap  : 12px;   /* margin between puzzle cards */
+}
+
+/* ========= basic page chrome ========= */
+body{
+  font-family: system-ui, sans-serif;
+  margin:.75in auto;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+h1{ margin:0 0 .15in; font-size:20pt; }
+h2{ margin:0 0 .15in; font-size:16pt; }
+
+/* ========= reusable toolbar ========= */
+.toolbar{
+  display:flex;
+  flex-wrap:wrap;           /* wrap on very narrow screens         */
+  gap:1rem;
+  margin-bottom:1.25rem;
+  align-items:flex-end;
+  justify-content:center;   /* whole bar is centred                */
+}
+.toolbar > *{ flex:0 0 auto; }   /* nothing stretches */
+
+/* label + select on one line */
+.toolbar label{
+  display:flex;
+  align-items:center;
+  gap:.4rem;
+  font-size:.9rem;
+}
+.toolbar label select{
+  width:auto;         /* hug content */
+  max-width:9rem;     /* but never enormous */
+}
+
+/* buttons */
+.toolbar button{
+  padding:.4rem .85rem;
+  font-size:.95rem;
+}
+
+/* ========= puzzle card ========= */
+.puzzle{
+  display:inline-block;
+  margin:var(--gap);
+  padding:.5rem .25rem .9rem;
+  border:1px solid #bbb;
+  border-radius:6px;
+  text-align:center;
+  page-break-inside:avoid;
+}
+.title{ font-weight:600; margin:.15rem 0 .35rem; font-size:1.35rem; }
+
+/* ========= grid & cells ========= */
+.grid{
+  position:relative;
+  display:grid;
+  margin:0 auto .5rem;
+  border:1px dotted #666;
+  grid-template-columns:repeat(auto-fill,var(--cell));
+  grid-auto-rows:var(--cell);
+}
+.cell{
+  position:relative;
+  width:var(--cell);
+  height:var(--cell);
+  box-sizing:border-box;
+  border:1px dotted #ccc;
+}
+.cell img{
+  max-width:80%;
+  max-height:80%;
+  position:absolute;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  user-select:none;
+  pointer-events:none;
+}
+.solBox{ position:absolute; border:4px solid crimson; pointer-events:none; }
+.metaRow{ display:flex; justify-content:space-between; font-size:1.05rem; align-items:center; }
+
+/* ========= wrapper for many puzzle cards ========= */
+.sheet{ width:100%; display:flex; flex-wrap:wrap; justify-content:center; }
+
+/* ========= print tweaks ========= */
+@media print{
+  body{ margin:.5in auto; }
+  .toolbar, #exportNotice{ display:none!important; }
+  h1,h2{ margin:0 auto .15in; }
+  .puzzle{ break-inside:avoid; }
+}
